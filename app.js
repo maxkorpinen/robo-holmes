@@ -59,7 +59,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('forward', function () {
-        motors.forward(255);
+        motors.forward(100);
     });
 
     socket.on('stop', function () {
@@ -67,17 +67,17 @@ io.on('connection', function (socket) {
     });
 
     socket.on('reverse', function () {
-        motors.reverse(255);
+        motors.reverse(100);
     });
 
     socket.on('right', function () {
-        motors[0].forward(100);
-        motors[1].forward(0);
+        motors[0].forward(70);
+        motors[1].forward(10);
     });
 
     socket.on('left', function () {
-        motors[0].forward(0);
-        motors[1].forward(100);
+        motors[0].forward(10);
+        motors[1].forward(70);
     });
 });
 
