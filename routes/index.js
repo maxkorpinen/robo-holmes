@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var five = require('johnny-five');
-var board = new five.Board();
+//var board = new five.Board();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   res.io.emit("socketToMe", "index");
 });
 
-board.on('ready', function () {
+/*board.on('ready', function () {
   var speed, commands, motors;
   motors = {
       a: new five.Motor([3, 12]),
@@ -51,7 +51,7 @@ board.on('ready', function () {
           motors.b.fwd(bSpeed);
       });
   });
-});
+});*/
 
 
 module.exports = router;

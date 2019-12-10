@@ -65,6 +65,20 @@ io.on('connection', function (socket) {
     socket.on('stop', function () {
         motors.stop();
     });
+
+    socket.on('reverse', function () {
+        motors.reverse(255);
+    });
+
+    socket.on('right', function () {
+        motors[0].forward(100);
+        motors[1].forward(0);
+    });
+
+    socket.on('left', function () {
+        motors[0].forward(0);
+        motors[1].forward(100);
+    });
 });
 
 /*
