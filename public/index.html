@@ -6,9 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Robo-Holmes</title>
     <link rel="stylesheet" href="./stylesheets/style.css">
+    
 </head>
 <body>
     <h1>Robo-Holmes</h1>
+
+    <div class="container">
+        <button class="fa fa-angle-up" id="forward">Forward</button>
+        <button class="fa fa-angle-left" id="left">Left</button>
+        <button class="fa fa-angle-down" id="reverse">Reverse</button>
+        <button class="fa fa-angle-right" id="right">Right</button>
+        <button class="fa stop" id="stop">STOP</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/script.js"></script>
+
 </body>
 </html>
