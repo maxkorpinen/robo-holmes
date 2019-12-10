@@ -6,6 +6,7 @@ var board = new five.Board();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+  res.io.emit("socketToMe", "index");
 });
 
 board.on('ready', function () {
