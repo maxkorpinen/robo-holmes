@@ -8,6 +8,7 @@ var board = new Board();
 const invertPWM = true;
 
 var indexRouter = require('./routes/index');
+var movementRouter = require('./routes/movement');
 
 var app = express();
 
@@ -20,11 +21,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// io.on('connection', function (socket) {
+//     console.log('a user connected');
+// });
+
+app.use(function(req, res, next) {
+    res.io = io;
+    next();
+});
+
 // app.use(function (req, res, next) {
 //     res.io = io;
 //     next();
 // });
+
 app.use('/', indexRouter);
+app.use('/movement', movementRouter);
 
 var motors;
 
