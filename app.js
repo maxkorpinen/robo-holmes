@@ -21,35 +21,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// io.on('connection', function (socket) {
-//     console.log('a user connected');
-// });
-
 app.use(function(req, res, next) {
     res.io = io;
     next();
 });
 
-// app.use(function (req, res, next) {
-//     res.io = io;
-//     next();
-// });
-
 app.use('/', indexRouter);
 app.use('/movement', movementRouter);
+
+// Define motors as global variables, and give values when board is recognized
 
 var motors;
 
 board.on("ready", () => {
-    /**
-     * Motor A: PWM 5, dir 4
-     * Motor B: PWM 11, dir 12
-     */
     motors = new Motors([
         { pins: { dir: 4, pwm: 5 }, invertPWM },
         { pins: { dir: 12, pwm: 11 }, invertPWM }
     ]);
 });
+
+// Listen to socket.io commands when connection is established
 
 io.on('connection', function (socket) {
     console.log('a user connected');
@@ -80,13 +71,5 @@ io.on('connection', function (socket) {
         motors[1].forward(70);
     });
 });
-
-/*
-io.on('connection', function (socket) {
-    socket.on('forward', function (msg) {
-        console.log('message: ' + msg);
-    });
-});
-*/
 
 module.exports = {app: app, server: server};
