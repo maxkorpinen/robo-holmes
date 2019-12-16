@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,8 +13,14 @@ var movementRouter = require('./routes/movement');
 
 var app = express();
 
+app.use(cors());
+
+var allowedOrigins = "http://localhost:*";
+
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {
+    origins: allowedOrigins
+});
 
 app.use(logger('dev'));
 app.use(express.json());
