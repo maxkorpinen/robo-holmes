@@ -13,13 +13,9 @@ var movementRouter = require('./routes/movement');
 
 var app = express();
 
-<<<<<<< HEAD
-var allowedOrigins = "http://localhost:*"
-=======
 app.use(cors());
 
-var allowedOrigins = "http://localhost:*";
->>>>>>> master
+var allowedOrigins = "*";
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server, {
@@ -32,15 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-<<<<<<< HEAD
-// io.on('connection', function (socket) {
-//     console.log('a user connected');
-// });
-
-app.use(function (req, res, next) {
-=======
 app.use(function(req, res, next) {
->>>>>>> master
     res.io = io;
     next();
 });
@@ -110,16 +98,4 @@ io.on('connection', function (socket) {
 
 });
 
-<<<<<<< HEAD
-/*
-io.on('connection', function (socket) {
-    socket.on('forward', function (msg) {
-        console.log('message: ' + msg);
-    });
-});
-*/
-
-module.exports = { app: app, server: server };
-=======
 module.exports = {app: app, server: server};
->>>>>>> master
