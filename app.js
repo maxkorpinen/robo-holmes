@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const { Board, Motors } = require("johnny-five");
+const { Board, Motors, Servo } = require("johnny-five");
 var board = new Board();
 const invertPWM = true;
 
@@ -13,9 +13,13 @@ var movementRouter = require('./routes/movement');
 
 var app = express();
 
+<<<<<<< HEAD
+var allowedOrigins = "http://localhost:*"
+=======
 app.use(cors());
 
 var allowedOrigins = "http://localhost:*";
+>>>>>>> master
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server, {
@@ -28,7 +32,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+<<<<<<< HEAD
+// io.on('connection', function (socket) {
+//     console.log('a user connected');
+// });
+
+app.use(function (req, res, next) {
+=======
 app.use(function(req, res, next) {
+>>>>>>> master
     res.io = io;
     next();
 });
@@ -39,19 +51,28 @@ app.use('/movement', movementRouter);
 // Define motors as global variables, and give values when board is recognized
 
 var motors;
+var servo;
 
 board.on("ready", () => {
     motors = new Motors([
         { pins: { dir: 4, pwm: 5 }, invertPWM },
         { pins: { dir: 12, pwm: 11 }, invertPWM }
     ]);
+
+    servo = new Servo(
+        {
+            pin: 6,
+            range: [10, 80],
+            startAt: 'min'
+        }
+    );
 });
 
 // Listen to socket.io commands when connection is established
 
 io.on('connection', function (socket) {
     console.log('a user connected');
-    
+
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
@@ -77,6 +98,28 @@ io.on('connection', function (socket) {
         motors[0].forward(10);
         motors[1].forward(70);
     });
+
+    //Servo controls
+    socket.on('moveup', function () {
+        servo.move(90);
+    });
+
+    socket.on('movedown', function () {
+        servo.move(30);
+    });
+
 });
 
+<<<<<<< HEAD
+/*
+io.on('connection', function (socket) {
+    socket.on('forward', function (msg) {
+        console.log('message: ' + msg);
+    });
+});
+*/
+
+module.exports = { app: app, server: server };
+=======
 module.exports = {app: app, server: server};
+>>>>>>> master
