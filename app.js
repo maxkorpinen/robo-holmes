@@ -26,11 +26,12 @@ var io = require('socket.io').listen(server);
 
 var board = new five.Board();
 // const invertPWM = true;
-var configs = five.Motor.SHIELD_CONFIGS.ARDUINO_MOTOR_SHIELD_R3_1;
 var motorA;
 var motorB;
 
 board.on("ready", () => {
+
+    var configs = five.Motor.SHIELD_CONFIGS.ARDUINO_MOTOR_SHIELD_R3_1;
 
     motorA = new five.Motor(configs.A);
     motorB = new five.Motor(configs.B);
@@ -53,8 +54,8 @@ io.on('connection', function (socket) {
 
     socket.on('forward', function () {
         console.log('forward')
-        motorA.forward(128);
-        motorB.reverse(128);
+        motorA.forward(255);
+        motorB.reverse(255);
     });
 
     socket.on('stop', function () {
@@ -65,18 +66,20 @@ io.on('connection', function (socket) {
 
     socket.on('reverse', function () {
         console.log('reverse')
-        motorA.reverse(128);
-        motorB.forward(128);
+        motorA.reverse(255);
+        motorB.forward(255);
     });
 
     socket.on('right', function () {
         console.log('right')
-        motorA.forward(128);
+        motorA.forward(255);
+        motorB.forward(200)
     });
 
     socket.on('left', function () {
         console.log('left')
-        motorB.reverse(128);
+        motorA.reverse(200);
+        motorB.reverse(255);
     });
 
     //Camera servo controls
@@ -87,5 +90,4 @@ io.on('connection', function (socket) {
     socket.on('movedown', function () {
         servo.move(30);
     });
-
 });
