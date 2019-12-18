@@ -73,12 +73,12 @@ io.on('connection', function (socket) {
     socket.on('right', function () {
         console.log('right')
         motorA.forward(255);
-        motorB.forward(220)
+        motorB.forward(255);
     });
 
     socket.on('left', function () {
         console.log('left')
-        motorA.reverse(220);
+        motorA.reverse(255);
         motorB.reverse(255);
     });
 
