@@ -1,27 +1,18 @@
-var express = require('express');
-var cors = require('cors');
+const express = require('express');
+const app = express()
+const port = 3000
 var path = require('path');
+const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 const { Board, Motors, Servo } = require("johnny-five");
 var board = new Board();
 const invertPWM = true;
 
-var indexRouter = require('./routes/index');
-var movementRouter = require('./routes/movement');
-
-var app = express();
-
 app.use(cors());
-
-var allowedOrigins = "*";
-
-var server = require('http').Server(app);
-var io = require('socket.io')(server, {
-    origins: allowedOrigins
-});
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,13 +24,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', indexRouter);
-app.use('/movement', movementRouter);
-
-// Define motors as global variables, and give values when board is recognized
-
-var motors;
-var servo;
+var io = require('socket.io').listen(server);
 
 board.on("ready", () => {
     motors = new Motors([
@@ -55,8 +40,6 @@ board.on("ready", () => {
         }
     );
 });
-
-// Listen to socket.io commands when connection is established
 
 io.on('connection', function (socket) {
     console.log('a user connected');
@@ -87,7 +70,7 @@ io.on('connection', function (socket) {
         motors[1].forward(70);
     });
 
-    //Servo controls
+    //Camera servo controls
     socket.on('moveup', function () {
         servo.move(90);
     });
@@ -97,5 +80,3 @@ io.on('connection', function (socket) {
     });
 
 });
-
-module.exports = {app: app, server: server};
