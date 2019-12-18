@@ -8,9 +8,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-const { Board, Motors, Servo } = require("johnny-five");
-var board = new Board();
-const invertPWM = true;
+const five = require("johnny-five");
 
 app.use(cors());
 app.use(logger('dev'));
@@ -26,19 +24,24 @@ app.use(function(req, res, next) {
 
 var io = require('socket.io').listen(server);
 
-board.on("ready", () => {
-    motors = new Motors([
-        { pins: { dir: 4, pwm: 5 }, invertPWM },
-        { pins: { dir: 12, pwm: 11 }, invertPWM }
-    ]);
+var board = new five.Board();
+// const invertPWM = true;
+var configs = five.Motor.SHIELD_CONFIGS.ARDUINO_MOTOR_SHIELD_R3_1;
+var motorA;
+var motorB;
 
-    servo = new Servo(
-        {
-            pin: 6,
-            range: [10, 80],
-            startAt: 'min'
-        }
-    );
+board.on("ready", () => {
+
+    motorA = new five.Motor(configs.A);
+    motorB = new five.Motor(configs.B);
+
+    // servo = new Servo(
+    //     {
+    //         pin: 6,
+    //         range: [10, 80],
+    //         startAt: 'min'
+    //     }
+    // );
 });
 
 io.on('connection', function (socket) {
@@ -49,25 +52,31 @@ io.on('connection', function (socket) {
     });
 
     socket.on('forward', function () {
-        motors.forward(100);
+        console.log('forward')
+        motorA.forward(128);
+        motorB.reverse(128);
     });
 
     socket.on('stop', function () {
-        motors.stop();
+        console.log('stop')
+        motorA.stop();
+        motorB.stop();
     });
 
     socket.on('reverse', function () {
-        motors.reverse(100);
+        console.log('reverse')
+        motorA.reverse(128);
+        motorB.forward(128);
     });
 
     socket.on('right', function () {
-        motors[0].forward(70);
-        motors[1].forward(10);
+        console.log('right')
+        motorA.forward(128);
     });
 
     socket.on('left', function () {
-        motors[0].forward(10);
-        motors[1].forward(70);
+        console.log('left')
+        motorB.reverse(128);
     });
 
     //Camera servo controls
