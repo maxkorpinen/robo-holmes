@@ -30,6 +30,7 @@ var motorB;
 var servo;
 var ledRight;
 var ledLeft;
+var servoPos = 0;
 
 board.on("ready", () => {
 
@@ -42,7 +43,7 @@ board.on("ready", () => {
         {
             pin: 6,
             range: [0, 70],
-            startAt: 'min'
+            startAt: servoPos
         }
     );
 
@@ -88,12 +89,19 @@ io.on('connection', function (socket) {
     });
 
     //Camera servo controls
+
     socket.on('moveup', function () {
-        servo.max();
+        if (servoPos !== 70) {
+            servoPos += 35;
+            servo.to(servoPos);
+        }
     });
 
     socket.on('movedown', function () {
-        servo.min();
+        if (servoPos !== 0) {
+            servoPos-= 35;
+            servo.to(servoPos);
+        }
     });
 
     socket.on('off', function() {
