@@ -8,8 +8,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-const five = require("johnny-five");
-
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
@@ -22,12 +20,14 @@ app.use(function(req, res, next) {
     next();
 });
 
+var five = require("johnny-five");
 var io = require('socket.io').listen(server);
 
 var board = new five.Board();
-// const invertPWM = true;
+
 var motorA;
 var motorB;
+// var servo;
 
 board.on("ready", () => {
 
@@ -36,7 +36,7 @@ board.on("ready", () => {
     motorA = new five.Motor(configs.A);
     motorB = new five.Motor(configs.B);
 
-    // servo = new Servo(
+    // servo = new five.Servo(
     //     {
     //         pin: 6,
     //         range: [10, 80],
