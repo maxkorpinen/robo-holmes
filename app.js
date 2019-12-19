@@ -27,7 +27,9 @@ var board = new five.Board();
 
 var motorA;
 var motorB;
-// var servo;
+var servo;
+var ledRight;
+var ledLeft;
 
 board.on("ready", () => {
 
@@ -36,13 +38,16 @@ board.on("ready", () => {
     motorA = new five.Motor(configs.A);
     motorB = new five.Motor(configs.B);
 
-    // servo = new five.Servo(
-    //     {
-    //         pin: 6,
-    //         range: [10, 80],
-    //         startAt: 'min'
-    //     }
-    // );
+    servo = new five.Servo(
+        {
+            pin: 6,
+            range: [0, 70],
+            startAt: 'min'
+        }
+    );
+
+    ledRight = new five.Led(10);
+    ledLeft = new five.Led(7);
 });
 
 io.on('connection', function (socket) {
@@ -84,10 +89,22 @@ io.on('connection', function (socket) {
 
     //Camera servo controls
     socket.on('moveup', function () {
-        servo.move(90);
+        servo.max();
     });
 
     socket.on('movedown', function () {
-        servo.move(30);
+        servo.min();
     });
+
+    socket.on('off', function() {
+            console.log("leds on");
+            ledRight.on();
+            ledLeft.on();
+    })
+
+    socket.on('on', function() {
+        console.log("leds off");
+        ledRight.off();
+        ledLeft.off();
+    })
 });
