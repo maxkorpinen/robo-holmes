@@ -106,13 +106,13 @@ io.on('connection', function (socket) {
 
     socket.on('off', function() {
             console.log("leds on");
-            ledRight.on();
-            ledLeft.on();
+            ledRight.off();
+            ledLeft.off();
     })
 
     socket.on('on', function() {
         console.log("leds off");
-        ledRight.off();
-        ledLeft.off();
+        ledRight.on();
+        ledLeft.on();
     })
 });
